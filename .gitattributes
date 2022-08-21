@@ -1,0 +1,9 @@
+*.h text eol=lf
+*.c text eol=lf
+*.sh text eol=lf
+*.txt test eol=lf
+*.py test eol=lf
+Makefile eol=lf
+
+*.md -text
+*.pdf -text
