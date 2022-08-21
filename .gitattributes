@@ -3,6 +3,9 @@
 *.sh text eol=lf
 *.txt test eol=lf
 *.py test eol=lf
+*.pl test eol=lf
+*.pm test eol=lf
+
 Makefile eol=lf
 
 *.md -text

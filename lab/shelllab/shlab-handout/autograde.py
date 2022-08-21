@@ -17,6 +17,10 @@ def get_program_result(cmd):
     ret = str(ret, encoding='utf-8')
     ret = ret.splitlines()
 
+    if pipe.poll() != 0:
+        print("%s execution failure" % (cmd))
+        exit(0)
+
     return ret
 
 
