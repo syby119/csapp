@@ -6,10 +6,6 @@
 #
 #     David O'Hallaron, Carnegie Mellon University
 #     updated: 2/8/2016
-#
-#     Yun Yang, Zhejiang University
-#     updated: 2/27/2022
-#     description: now the script can run on Ubuntu with python3
 # 
 #     usage: ./driver.sh
 # 
@@ -28,10 +24,6 @@ MAX_RAND=63000
 PORT_START=1024
 PORT_MAX=65000
 MAX_PORT_TRIES=10
-PYTHON_EXEC="python3"
-
-gcc --version | grep -i ubuntu > /dev/null
-is_ubuntu=$?
 
 # List of text and binary files for the basic test
 BASIC_LIST="home.html
@@ -88,13 +80,9 @@ function clear_dirs {
 #
 function wait_for_port_use() {
     timeout_count="0"
-    if [ "${is_ubuntu}" == "0" ]; then
-        portsinuse=`netstat --numeric-ports --numeric-hosts -at | grep tcp`
-    else
-        portsinuse=`netstat --numeric-ports --numeric-hosts -a --protocol=tcpip \
-            | grep tcp | cut -c21- | cut -d':' -f2 | cut -d' ' -f1 \
-            | grep -E "[0-9]+" | uniq | tr "\n" " "`
-    fi
+    portsinuse=`netstat --numeric-ports --numeric-hosts -a --protocol=tcpip \
+        | grep tcp | cut -c21- | cut -d':' -f2 | cut -d' ' -f1 \
+        | grep -E "[0-9]+" | uniq | tr "\n" " "`
 
     echo "${portsinuse}" | grep -wq "${1}"
     while [ "$?" != "0" ]
@@ -105,13 +93,9 @@ function wait_for_port_use() {
         fi
 
         sleep 1
-        if [ "${is_ubuntu}" == "0" ]; then
-            portsinuse=`netstat --numeric-ports --numeric-hosts -at | grep tcp`
-        else
-            portsinuse=`netstat --numeric-ports --numeric-hosts -a --protocol=tcpip \
-                | grep tcp | cut -c21- | cut -d':' -f2 | cut -d' ' -f1 \
-                | grep -E "[0-9]+" | uniq | tr "\n" " "`
-        fi
+        portsinuse=`netstat --numeric-ports --numeric-hosts -a --protocol=tcpip \
+            | grep tcp | cut -c21- | cut -d':' -f2 | cut -d' ' -f1 \
+            | grep -E "[0-9]+" | uniq | tr "\n" " "`
         echo "${portsinuse}" | grep -wq "${1}"
     done
 }
@@ -128,13 +112,9 @@ function free_port {
 
     while [ TRUE ] 
     do
-        if [ "${is_ubuntu}" == "0" ]; then
-            portsinuse=`netstat --numeric-ports --numeric-hosts -at | grep tcp`
-        else
-            portsinuse=`netstat --numeric-ports --numeric-hosts -a --protocol=tcpip \
-                | grep tcp | cut -c21- | cut -d':' -f2 | cut -d' ' -f1 \
-                | grep -E "[0-9]+" | uniq | tr "\n" " "`
-        fi
+        portsinuse=`netstat --numeric-ports --numeric-hosts -a --protocol=tcpip \
+            | grep tcp | cut -c21- | cut -d':' -f2 | cut -d' ' -f1 \
+            | grep -E "[0-9]+" | uniq | tr "\n" " "`
 
         echo "${portsinuse}" | grep -wq "${port}"
         if [ "$?" == "0" ]; then
@@ -318,7 +298,7 @@ wait_for_port_use "${proxy_port}"
 # Run a special blocking nop-server that never responds to requests
 nop_port=$(free_port)
 echo "Starting the blocking NOP server on port ${nop_port}"
-${PYTHON_EXEC} ./nop-server.py ${nop_port} &> /dev/null &
+./nop-server.py ${nop_port} &> /dev/null &
 nop_pid=$!
 
 # Wait for the nop server to start in earnest

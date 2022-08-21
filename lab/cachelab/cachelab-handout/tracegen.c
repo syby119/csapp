@@ -74,10 +74,8 @@ int main(int argc, char* argv[]){
     registerFunctions();
 
     /* Fill A with data */
-    initMatrix(M, N, A, B); 
+    initMatrix(M,N, A, B); 
 
-    char filename[128];
-    sprintf(filename, "%d_%d.marker", M, N);
     /* Record marker addresses */
     FILE* marker_fp = fopen(".marker","w");
     assert(marker_fp);
@@ -105,3 +103,5 @@ int main(int argc, char* argv[]){
     }
     return 0;
 }
+
+

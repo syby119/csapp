@@ -6,7 +6,7 @@ VERSION = 1
 HANDINDIR = /afs/cs.cmu.edu/academic/class/15213-f01/malloclab/handin
 
 CC = gcc
-CFLAGS = -Wall -Wno-unused-result -Wno-unused-function -g -m32
+CFLAGS = -Wall -O2 -m32
 
 OBJS = mdriver.o mm.o memlib.o fsecs.o fcyc.o clock.o ftimer.o
 
@@ -23,9 +23,8 @@ clock.o: clock.c clock.h
 
 handin:
 	cp mm.c $(HANDINDIR)/$(TEAM)-$(VERSION)-mm.c
-	cp mm.c $(HANDINDIR)/$(TEAM)-$(VERSION)-mm_implicit.c
-	cp mm.c $(HANDINDIR)/$(TEAM)-$(VERSION)-mm_explicit.c
-	cp mm.c $(HANDINDIR)/$(TEAM)-$(VERSION)-mm_segregated.c
 
 clean:
-	rm -f *~ *.o mdriver *.txt
+	rm -f *~ *.o mdriver
+
+

@@ -5,7 +5,7 @@
 # build your proxy from sources.
 
 CC = gcc
-CFLAGS = -g -Wall -Wno-format-overflow
+CFLAGS = -g -Wall
 LDFLAGS = -lpthread
 
 all: proxy
@@ -26,4 +26,4 @@ handin:
 
 clean:
 	rm -f *~ *.o proxy core *.tar *.zip *.gzip *.bzip *.gz
-	rm -rf .proxy .noproxy
+

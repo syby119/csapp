@@ -46,41 +46,39 @@ static struct results results = {-1, 0, INT_MAX};
  */
 void eval_perf(unsigned int s, unsigned int E, unsigned int b)
 {
-    int i,flag,ret;
+    int i,flag;
     unsigned int len, hits, misses, evictions;
     unsigned long long int marker_start, marker_end, addr;
     char buf[1000], cmd[255];
     char filename[128];
 
-    registerFunctions();
+    registerFunctions(); 
 
     /* Open the complete trace file */
-    FILE* full_trace_fp;
-    FILE* part_trace_fp;
+    FILE* full_trace_fp;  
+    FILE* part_trace_fp; 
 
     /* Evaluate the performance of each registered transpose function */
 
-    for (i = 0; i < func_counter; ++i) {
-        if (strcmp(func_list[i].description, SUBMIT_DESCRIPTION) == 0)
+    for (i=0; i<func_counter; i++) {
+        if (strcmp(func_list[i].description, SUBMIT_DESCRIPTION) == 0 )
             results.funcid = i; /* remember which function is the submission */
 
 
         printf("\nFunction %d (%d total)\nStep 1: Validating and generating memory traces\n",i,func_counter);
         /* Use valgrind to generate the trace */
 
-        sprintf(filename, "trace_%d_%d.tmp", M, N);
-        sprintf(cmd, "valgrind --tool=lackey --trace-mem=yes --log-fd=1 -v ./tracegen -M %d -N %d -F %d  > %s", M, N, i, filename);
-        flag = WEXITSTATUS(system(cmd));
-        if (0 != flag) {
-            printf("Validation error at function %d! Run ./tracegen -M %d -N %d -F %d for details.\n", flag-1, M, N, i);
-            printf("Skipping performance evaluation for this function.\n");
+        sprintf(cmd, "valgrind --tool=lackey --trace-mem=yes --log-fd=1 -v ./tracegen -M %d -N %d -F %d  > trace.tmp", M, N,i);
+        flag=WEXITSTATUS(system(cmd));
+        if (0!=flag) {
+            printf("Validation error at function %d! Run ./tracegen -M %d -N %d -F %d for details.\nSkipping performance evaluation for this function.\n",flag-1,M,N,i);      
             continue;
         }
 
         /* Get the start and end marker addresses */
         FILE* marker_fp = fopen(".marker", "r");
         assert(marker_fp);
-        ret = fscanf(marker_fp, "%llx %llx", &marker_start, &marker_end);
+        fscanf(marker_fp, "%llx %llx", &marker_start, &marker_end);
         fclose(marker_fp);
 
 
@@ -91,12 +89,12 @@ void eval_perf(unsigned int s, unsigned int E, unsigned int b)
             results.correct = 1;
         }
 
-        full_trace_fp = fopen(filename, "r");
+        full_trace_fp = fopen("trace.tmp", "r");
         assert(full_trace_fp);
 
 
         /* Filtered trace for each transpose function goes in a separate file */
-        sprintf(filename, "trace_%d_%d.f%d", M, N, i);
+        sprintf(filename, "trace.f%d", i);
         part_trace_fp = fopen(filename, "w");
         assert(part_trace_fp);
     
@@ -139,18 +137,14 @@ void eval_perf(unsigned int s, unsigned int E, unsigned int b)
         /* Run the reference simulator */
         printf("Step 2: Evaluating performance (s=%d, E=%d, b=%d)\n", s, E, b);
         char cmd[255];
-        sprintf(filename, "trace_%d_%d.f%d", M, N, i);
-        sprintf(cmd, "./csim-ref -s %u -E %u -b %u -t %s > /dev/null", 
-                s, E, b, filename);
-        ret = system(cmd);
-        if (ret == -1) {
-            printf("system function call error");
-        }
+        sprintf(cmd, "./csim-ref -s %u -E %u -b %u -t trace.f%d > /dev/null", 
+                s, E, b, i);
+        system(cmd);
     
         /* Collect results from the reference simulator */
         FILE* in_fp = fopen(".csim_results","r");
         assert(in_fp);
-        ret = fscanf(in_fp, "%u %u %u", &hits, &misses, &evictions);
+        fscanf(in_fp, "%u %u %u", &hits, &misses, &evictions);
         fclose(in_fp);
         func_list[i].num_hits = hits;
         func_list[i].num_misses = misses;
@@ -163,6 +157,7 @@ void eval_perf(unsigned int s, unsigned int E, unsigned int b)
             results.misses = misses;
         }
     }
+  
 }
 
 /*
@@ -239,13 +234,13 @@ int main(int argc, char* argv[])
         exit(1);
     }
 
-    // if (signal(SIGALRM, sigalrm_handler) == SIG_ERR) {
-    //     fprintf(stderr, "Unable to install SIGALRM handler\n");
-    //     exit(1);
-    // }
+    if (signal(SIGALRM, sigalrm_handler) == SIG_ERR) {
+        fprintf(stderr, "Unable to install SIGALRM handler\n");
+        exit(1);
+    }
 
     /* Time out and give up after a while */
-    // alarm(300);
+    alarm(120);
 
     /* Check the performance of the student's transpose function */
     eval_perf(5, 1, 5);

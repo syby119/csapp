@@ -327,11 +327,11 @@ static int test_function(test_ptr t) {
     }
 
     /* Sanity check on the ranges */
-    if (args >= 1 && arg_test_range[0] < 1)
+    if (arg_test_range[0] < 1)
 	arg_test_range[0] = 1;
-    if (args >= 2 && arg_test_range[1] < 1) 
+    if (arg_test_range[1] < 1) 
 	arg_test_range[1] = 1;
-    if (args >= 3 && arg_test_range[2] < 1)
+    if (arg_test_range[2] < 1) 
 	arg_test_range[2] = 1;
 
     /* Create a test set for each argument */
