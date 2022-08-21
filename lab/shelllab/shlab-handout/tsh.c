@@ -346,12 +346,12 @@ void do_bgfg(char **argv)
     } else if (sscanf(argv[1], "%%%d", &id) > 0) { /* jobid given in format: %jobid */
         if ((job = getjobjid(jobs, (pid_t)id)) == NULL) {
             Sigprocmask(SIG_SETMASK, &prev, NULL);
-            printf("(%d): No such job\n", id);
+            printf("%%%d: No such job\n", id);
             return;
         }
     } else {
         Sigprocmask(SIG_SETMASK, &prev, NULL);
-        printf("%s command requires PID or %%jobid argument\n", argv[0]);
+        printf("%s: argument must be a PID or %%jobid\n", argv[0]);
         return;
     }
 
